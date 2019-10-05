@@ -1,12 +1,6 @@
 trigger:
 - master
 
-variables:
-  DEPOT_TOOLS_WIN_TOOLCHAIN: '0'
-  DEPOT_TOOLS_METRICS: '0'
-  PYTHON_HOME: ''
-  ANGLE_REVISION: '087f1384f233792921d34c0ca5b5a90fac75b070'
-
 jobs:
 - job: Build_Mono
   timeoutInMinutes: 0
