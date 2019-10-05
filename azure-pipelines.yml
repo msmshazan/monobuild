@@ -35,7 +35,7 @@ jobs:
   - task: GitHubRelease@1
     inputs:
       gitHubConnection: 'msmshazan Github PAT'
-      repositoryName: 'msmshazan/anglebuild'
+      repositoryName: 'msmshazan/monobuild'
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
