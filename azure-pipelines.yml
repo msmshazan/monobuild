@@ -40,7 +40,7 @@ jobs:
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
       tag: 'Release-$(MONO_REVISION)'
-      title: 'ANGLE Binaries'
+      title: 'Mono Binaries'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
       assets: '$(Build.SourcesDirectory)/mono.zip'
