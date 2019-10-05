@@ -1,0 +1,48 @@
+trigger:
+- master
+
+variables:
+  DEPOT_TOOLS_WIN_TOOLCHAIN: '0'
+  DEPOT_TOOLS_METRICS: '0'
+  PYTHON_HOME: ''
+  ANGLE_REVISION: '087f1384f233792921d34c0ca5b5a90fac75b070'
+
+jobs:
+- job: Build_Mono
+  timeoutInMinutes: 0
+  pool:
+   vmImage: 'windows-2019'
+  steps:
+  - script: |
+      New-Item -Name "Binaries" -ItemType "directory"
+      git clone https://github.com/mono/mono.git
+      cd mono
+      git submodule update --init --recursive
+    displayName: 'Fetch mono repo'
+  - powershell: |
+      $env:Path = "$pwd\depot_tools;" + $env:Path
+      &("C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat")
+      cd mono
+      msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="..\Binaries\" /p:MONO_TARGET_GC=sgen
+      msbuild bcl.sln /p:Platform="net_4_x" /restore
+      msbuild msvc\mono.sln /p:Platform=Win32 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="..\Binaries\" /p:MONO_TARGET_GC=sgen
+      msbuild bcl.sln /p:Platform="net_4_x" /restore
+    displayName: 'Build mono'
+  - powershell: |
+      7z a mono.zip Binaries\*
+    displayName: 'Copy Binaries'
+  - publish: $(Build.SourcesDirectory)/ANGLE.zip
+    artifact: Mono Binaries
+
+  - task: GitHubRelease@1
+    inputs:
+      gitHubConnection: 'msmshazan Github PAT'
+      repositoryName: 'msmshazan/anglebuild'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'userSpecifiedTag'
+      tag: 'Release-$(ANGLE_REVISION)'
+      title: 'ANGLE Binaries'
+      changeLogCompareToRelease: 'lastFullRelease'
+      changeLogType: 'commitBased'
+      assets: '$(Build.SourcesDirectory)/mono.zip'
