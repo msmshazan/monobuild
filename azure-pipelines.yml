@@ -17,8 +17,8 @@ jobs:
       git submodule update --recursive
     displayName: 'Fetch mono repo'
 
-  - powershell: |
-      &("C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat")
+  - script: |
+      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
       refreshenv
       cd mono
       msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="..\Binaries\" /p:MONO_TARGET_GC=sgen
