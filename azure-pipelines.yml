@@ -13,8 +13,8 @@ jobs:
   - powershell: |
       New-Item -Name "Binaries" -ItemType "directory"
       git clone https://github.com/mono/mono.git
-      git checkout $(MONO_REVISION)
       cd mono
+      git checkout $(MONO_REVISION)
       git submodule update --init --recursive
     displayName: 'Fetch mono repo'
 
