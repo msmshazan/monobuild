@@ -1,20 +1,24 @@
 trigger:
 - master
 
+variables:
+  MONO_REVISION: '2019-08'
+
 jobs:
 - job: Build_Mono
   timeoutInMinutes: 0
   pool:
    vmImage: 'windows-2019'
   steps:
-  - script: |
+  - powershell: |
       New-Item -Name "Binaries" -ItemType "directory"
       git clone https://github.com/mono/mono.git
+      git checkout $(MONO_REVISION)
       cd mono
       git submodule update --init --recursive
     displayName: 'Fetch mono repo'
+
   - powershell: |
-      $env:Path = "$pwd\depot_tools;" + $env:Path
       &("C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat")
       cd mono
       msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="..\Binaries\" /p:MONO_TARGET_GC=sgen
@@ -25,7 +29,7 @@ jobs:
   - powershell: |
       7z a mono.zip Binaries\*
     displayName: 'Copy Binaries'
-  - publish: $(Build.SourcesDirectory)/ANGLE.zip
+  - publish: $(Build.SourcesDirectory)/mono.zip
     artifact: Mono Binaries
 
   - task: GitHubRelease@1
@@ -35,7 +39,7 @@ jobs:
       action: 'create'
       target: '$(Build.SourceVersion)'
       tagSource: 'userSpecifiedTag'
-      tag: 'Release-$(ANGLE_REVISION)'
+      tag: 'Release-$(MONO_REVISION)'
       title: 'ANGLE Binaries'
       changeLogCompareToRelease: 'lastFullRelease'
       changeLogType: 'commitBased'
