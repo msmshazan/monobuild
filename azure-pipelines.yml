@@ -16,10 +16,12 @@ jobs:
       cd mono
       git submodule update --recursive
     displayName: 'Fetch mono repo'
-
+  - task: BatchScript@1
+    inputs:
+      filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
+      #arguments: # Optional
+      modifyEnvironment: True
   - script: |
-      call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
-      refreshenv
       cd mono
       msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="..\Binaries\" /p:MONO_TARGET_GC=sgen
       msbuild bcl.sln /p:Platform="net_4_x" /restore
@@ -31,7 +33,7 @@ jobs:
     displayName: 'Copy Binaries'
   - publish: $(Build.SourcesDirectory)/mono.zip
     artifact: Mono Binaries
-
+  
   - task: GitHubRelease@1
     inputs:
       gitHubConnection: 'msmshazan Github PAT'
