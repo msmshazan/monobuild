@@ -14,7 +14,7 @@ jobs:
       mkdir Binaries
       git clone --branch %MONO_REVISION% https://github.com/mono/mono.git
     displayName: 'Fetch mono repo'
-  - script: |
+  - powershell: |
       cd mono
       git submodule update --recursive
     displayName: 'Fetch mono repo submodules'
