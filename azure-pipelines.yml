@@ -10,9 +10,9 @@ jobs:
   pool:
    vmImage: 'windows-2019'
   steps:
-  - powershell: |
-      New-Item -Name "Binaries" -ItemType "directory"
-      git clone --branch $(MONO_REVISION) https://github.com/mono/mono.git
+  - script: |
+      mkdir Binaries
+      git clone --branch %MONO_REVISION% https://github.com/mono/mono.git
       cd mono
       git submodule update --recursive
     displayName: 'Fetch mono repo'
