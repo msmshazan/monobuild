@@ -13,13 +13,14 @@ jobs:
   - script: |
       mkdir Binaries
       git clone --branch %MONO_REVISION% https://github.com/mono/mono.git
+    displayName: 'Fetch mono repo'
+  - script: |
       cd mono
       git submodule update --recursive
-    displayName: 'Fetch mono repo'
+    displayName: 'Fetch mono repo submodules'
   - task: BatchScript@1
     inputs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
-      #arguments: # Optional
       modifyEnvironment: True
   - script: |
       cd mono
