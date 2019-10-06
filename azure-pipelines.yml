@@ -16,7 +16,7 @@ jobs:
     displayName: 'Fetch mono repo'
   - powershell: |
       cd mono
-      displayName: 'Fetch mono repo submodules'
+    displayName: 'Fetch mono repo submodules'
   - task: BatchScript@1
     inputs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
