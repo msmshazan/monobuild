@@ -12,12 +12,11 @@ jobs:
   steps:
   - script: |
       mkdir Binaries
-      git clone --branch %MONO_REVISION% https://github.com/mono/mono.git
+      git clone --recurse-submodules --branch %MONO_REVISION% https://github.com/mono/mono.git
     displayName: 'Fetch mono repo'
   - powershell: |
       cd mono
-      git submodule update --recursive
-    displayName: 'Fetch mono repo submodules'
+      displayName: 'Fetch mono repo submodules'
   - task: BatchScript@1
     inputs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
