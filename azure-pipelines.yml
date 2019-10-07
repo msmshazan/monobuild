@@ -23,9 +23,9 @@ jobs:
       modifyEnvironment: True
   - script: |
       cd mono
-      msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen
-      msbuild msvc\mono.sln /p:Platform=Win32 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen
-      msbuild bcl.sln /p:Platform="net_4_x" /restore
+      msbuild msvc\mono.sln /p:Platform=Win32 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen  /restore
+      msbuild msvc\mono.sln /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen  /restore
+      msbuild bcl.sln /p:Configuration=Release /p:Platform="net_4_x" /restore
     displayName: 'Build mono'
   - powershell: |
       7z a mono.zip Binaries\*
