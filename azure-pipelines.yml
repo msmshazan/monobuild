@@ -25,6 +25,7 @@ jobs:
       msbuild bcl.sln /p:Configuration=Release /p:Platform="net_4_x" /restore
     displayName: 'Build mono'
     continueOnError: true
+    failOnStderr: false
   - powershell: |
       7z a mono.zip Binaries\*
     displayName: 'Copy Binaries'
