@@ -10,6 +10,12 @@ jobs:
   pool:
    vmImage: 'windows-2019'
   steps:
+  - powershell: |
+      choco install mono 2>&1>$null
+      Invoke-WebRequest -Uri "https://cygwin.com/setup-x86_64.exe" -OutFile setup-x86_64.exe
+      &setup-x86_64.exe -P autoconf,automake,bison,gcc-core,gcc-g++,mingw64-i686-runtime,mingw64-i686-binutils,mingw64-i686-gcc-core,mingw64-i686-gcc-g++,mingw64-i686-pthreads,mingw64-i686-w32api,mingw64-x86_64-runtime,mingw64-x86_64-binutils,mingw64-x86_64-gcc-core,mingw64-x86_64-gcc-g++,mingw64-x86_64-pthreads,mingw64-x86_64-w32api,libtool,make,python,gettext-devel,gettext,intltool,libiconv,pkg-config,git,curl,wget,libxslt,bc,patch,cmake,perl,yasm,unzip
+      Remove-Item setup-x86_64.exe
+    displayName: 'Fetch Cygwin'
   - script: |
       mkdir Binaries
       git clone --recurse-submodules --branch %MONO_REVISION% https://github.com/mono/mono.git
@@ -18,11 +24,17 @@ jobs:
     inputs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
       modifyEnvironment: True
-  - script: |
+  - bash: |
+      export PREFIX=[mono installation location]
+      export PATH='C:/Program Files/Mono/bin':$PATH
       cd mono
-      msbuild msvc\mono.sln /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0.18362.0 /p:Platform=Win32 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen  /restore
-      msbuild msvc\mono.sln /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0.18362.0 /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen  /restore
-      msbuild bcl.sln /p:Configuration=Release /p:Platform="net_4_x" /restore
+      ./autogen.sh --prefix=$PREFIX --host=i686-w64-mingw32--enable-msvc --disable-boehm
+      make get-monolite-latest
+      make -j4
+      make install
+      ./autogen.sh --prefix=$PREFIX --host=x86_64-w64-mingw32 --enable-msvc --disable-boehm
+      make -j4
+      make install    
     displayName: 'Build mono'
     continueOnError: true
     failOnStderr: false
