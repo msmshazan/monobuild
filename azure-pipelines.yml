@@ -24,6 +24,7 @@ jobs:
       msbuild msvc\mono.sln /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0.18362.0 /p:Platform=x64 /p:Configuration=Release /p:MONO_BUILD_DIR_PREFIX="$(MSBuildProjectDirectory)/../Binaries/" /p:MONO_TARGET_GC=sgen  /restore
       msbuild bcl.sln /p:Configuration=Release /p:Platform="net_4_x" /restore
     displayName: 'Build mono'
+    continueOnError: true
   - powershell: |
       7z a mono.zip Binaries\*
     displayName: 'Copy Binaries'
