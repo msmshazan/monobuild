@@ -2,7 +2,7 @@ trigger:
 - master
 
 variables:
-  MONO_REVISION: '2019-08'
+  MONO_REVISION: '2020-02'
 
 jobs:
 - job: Build_Mono
@@ -18,7 +18,7 @@ jobs:
     displayName: 'Fetch Cygwin'
   - script: |
       mkdir Binaries
-      git clone --recurse-submodules --branch %MONO_REVISION% https://github.com/mono/mono.git
+      git clone --recurse-submodules https://github.com/mono/mono.git
     displayName: 'Fetch mono repo'
   - task: BatchScript@1
     inputs:
