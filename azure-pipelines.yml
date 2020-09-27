@@ -28,7 +28,7 @@ jobs:
       modifyEnvironment: True
   - bash: |
       export PREFIX=$(pwd)/Binaries
-      export PATH='C:/Program Files/Mono/bin':'C:\cygwin\bin':$PATH
+      export PATH='/c/Program Files/Mono/bin':'/c/cygwin/bin':$PATH
       cd mono
       ./autogen.sh --prefix=$PREFIX --host=i686-w64-mingw32--enable-msvc --disable-boehm
       make get-monolite-latest
