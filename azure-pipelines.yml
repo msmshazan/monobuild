@@ -31,10 +31,8 @@ jobs:
       export PATH='/c/Program Files/Mono/bin':'/c/cygwin/bin':$PATH
       cd mono
       ./autogen.sh --prefix=$PREFIX/x86 --host=i686-w64-mingw32--enable-msvc --disable-boehm
-      make get-monolite-latest
       make -j4
       ./autogen.sh --prefix=$PREFIX/x64 --host=x86_64-w64-mingw32 --enable-msvc --disable-boehm
-      make get-monolite-latest
       make -j4
     displayName: 'Build mono'
     continueOnError: true
