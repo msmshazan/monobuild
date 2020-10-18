@@ -11,7 +11,7 @@ jobs:
    vmImage: 'windows-2019'
   steps:
   - powershell: |
-      choco install mono 2>&1>$null
+      choco install mono 
       choco install cygwin --params "/InstallDir:C:\cygwin /NoStartMenu" 
       refreshenv
       choco install cyg-get
@@ -30,7 +30,6 @@ jobs:
       export PREFIX=$(pwd)/Binaries
       export PATH='/c/Program Files/Mono/bin':'/c/cygwin/bin':$PATH
       cd mono
-      make get-monolite-latest
       ./autogen.sh --prefix=$PREFIX/x86 --host=i686-w64-mingw32 --enable-msvc --disable-boehm
       make -j4
       ./autogen.sh --prefix=$PREFIX/x64 --host=x86_64-w64-mingw32 --enable-msvc --disable-boehm
