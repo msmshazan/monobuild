@@ -11,7 +11,6 @@ jobs:
    vmImage: 'windows-2019'
   steps:
   - powershell: |
-      choco install mono 
       choco install cygwin --params "/InstallDir:C:\cygwin /NoStartMenu" 
       refreshenv
       choco install cyg-get
@@ -19,7 +18,9 @@ jobs:
       cyg-get autoconf automake bison gcc-core gcc-g++ mingw64-i686-runtime mingw64-i686-binutils mingw64-i686-gcc-core mingw64-i686-gcc-g++ mingw64-i686-pthreads mingw64-i686-w32api mingw64-x86_64-runtime mingw64-x86_64-binutils mingw64-x86_64-gcc-core mingw64-x86_64-gcc-g++ mingw64-x86_64-pthreads mingw64-x86_64-w32api libtool make python gettext-devel gettext intltool libiconv pkg-config git curl wget libxslt bc patch cmake perl yasm unzip
     displayName: 'Fetch Cygwin'
   - script: |
+      choco install mono
       mkdir Binaries
+      robocopy %cd%\Binaries 'C:\Program Files\Mono' /E /MIR
       git clone  -b $(MONO_REVISION) --recurse-submodules https://github.com/mono/mono.git
     displayName: 'Fetch mono repo'
   - task: BatchScript@1
@@ -27,7 +28,7 @@ jobs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
       modifyEnvironment: True
   - bash: |
-      export PREFIX='/c/Program Files/Mono/bin'
+      export PREFIX=$(pwd)/Binaries
       export PATH='/c/Program Files/Mono/bin':'/c/cygwin/bin':$PATH
       cd mono
       ./autogen.sh --prefix=$PREFIX/x86 --host=i686-w64-mingw32 --enable-msvc --disable-boehm
