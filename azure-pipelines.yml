@@ -27,7 +27,7 @@ jobs:
       filename: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat'
       modifyEnvironment: True
   - bash: |
-      export PREFIX=$(pwd)/Binaries
+      export PREFIX='/c/Program Files/Mono/bin'
       export PATH='/c/Program Files/Mono/bin':'/c/cygwin/bin':$PATH
       cd mono
       ./autogen.sh --prefix=$PREFIX/x86 --host=i686-w64-mingw32 --enable-msvc --disable-boehm
