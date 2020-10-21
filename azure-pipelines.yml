@@ -20,7 +20,7 @@ jobs:
   - script: |
       choco install mono
       mkdir Binaries
-      robocopy %cd%\Binaries 'C:\Program Files\Mono' /E /MIR
+      robocopy %cd%\Binaries "C:\Program Files\Mono" /E /MIR
       git clone  -b $(MONO_REVISION) --recurse-submodules https://github.com/mono/mono.git
     displayName: 'Fetch mono repo'
   - task: BatchScript@1
