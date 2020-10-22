@@ -35,8 +35,6 @@ jobs:
       make -j4
       make install
     displayName: 'Build mono'
-    continueOnError: true
-    failOnStderr: false
   - powershell: |
       7z a mono.zip Binaries\*
     displayName: 'Copy Binaries'
