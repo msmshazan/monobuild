@@ -33,6 +33,7 @@ jobs:
       cd mono
       ./autogen.sh --prefix=$PREFIX/x64 --host=x86_64-w64-mingw32 --enable-msvc --disable-boehm
       make -j4
+      make install
     displayName: 'Build mono'
     continueOnError: true
     failOnStderr: false
