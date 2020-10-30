@@ -35,8 +35,8 @@ jobs:
       make -j4
       make install
     displayName: 'Build mono'
-  - powershell: |
-      7z a mono.zip Binaries\*
+  - bash: |
+      7z a mono.zip $(pwd)/Binaries/*
     displayName: 'Copy Binaries'
   - publish: $(Build.SourcesDirectory)/mono.zip
     artifact: Mono Binaries
